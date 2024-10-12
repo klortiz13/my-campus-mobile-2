@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:campus_mobile_experimental/app_networking.dart';
 import 'package:campus_mobile_experimental/core/models/shuttle_arrival.dart';
 import 'package:campus_mobile_experimental/core/models/shuttle_stop.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:network_helper/app_networking.dart';
 
 class ShuttleService {
   ShuttleService();
@@ -13,7 +13,6 @@ class ShuttleService {
   List<ShuttleStopModel> get data => _data;
   /// add state related things for view model here
   /// add any type of data manipulation here so it can be accessed via provider
-  final NetworkHelper _networkHelper = NetworkHelper();
   final Map<String, String> headers = {
     "accept": "application/json",
     "Authorization": dotenv.get('MOBILE_APP_PUBLIC_DATA_KEY')
@@ -24,7 +23,7 @@ class ShuttleService {
     try {
       /// fetch data
       String _response =
-          await (_networkHelper.authorizedFetch(dotenv.get('SHUTTLE_API_ENDPOINT'), headers));
+          await (authorizedFetch(dotenv.get('SHUTTLE_API_ENDPOINT'), headers));
 
       /// parse data
       var data = shuttleStopModelFromJson(_response);
@@ -42,7 +41,7 @@ class ShuttleService {
     _error = null; _isLoading = true;
     try {
       /// fetch data
-      String _response = await (_networkHelper.authorizedFetch(
+      String _response = await (authorizedFetch(
           dotenv.get('SHUTTLE_API_ENDPOINT') + "/$stopId/arrivals", headers));
 
       /// parse data

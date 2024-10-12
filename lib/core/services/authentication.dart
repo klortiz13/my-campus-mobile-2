@@ -1,6 +1,6 @@
-import 'package:campus_mobile_experimental/app_networking.dart';
 import 'package:campus_mobile_experimental/core/models/authentication.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:network_helper/app_networking.dart';
 
 class AuthenticationService {
   AuthenticationService();
@@ -10,9 +10,6 @@ class AuthenticationService {
 
   /// add state related things for view model here
   /// add any type of data manipulation here so it can be accessed via provider
-
-  final NetworkHelper _networkHelper = NetworkHelper();
-
   Future<bool> silentLogin(String base64EncodedWithEncryptedPassword) async {
     _error = null;
     try {
@@ -23,7 +20,7 @@ class AuthenticationService {
 
       /// fetch data
       /// MODIFIED TO USE EXPONENTIAL RETRY
-      var response = await _networkHelper.authorizedPublicPost(
+      var response = await authorizedPublicPost(
           dotenv.get('AUTH_SERVICE_API_ENDPOINT'), authServiceHeaders, null);
 
       /// check to see if response has an error
@@ -53,7 +50,7 @@ class AuthenticationService {
 
       /// fetch data
       /// MODIFIED TO USE EXPONENTIAL RETRY
-      var response = await _networkHelper.authorizedPost(
+      var response = await authorizedPost(
         dotenv.get('AUTH_SERVICE_API_ENDPOINT'), authServiceHeaders, null);
 
       /// check to see if response has an error
@@ -76,5 +73,4 @@ class AuthenticationService {
   DateTime? get lastUpdated => _lastUpdated;
   AuthenticationModel? get data => _data;
   String? get error => _error;
-  NetworkHelper get availabilityService => _networkHelper;
 }

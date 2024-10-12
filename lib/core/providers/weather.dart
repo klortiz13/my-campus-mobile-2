@@ -27,7 +27,7 @@ class WeatherDataProvider extends ChangeNotifier {
     _isLoading = true;
     _error = null;
     notifyListeners();
-    if (await _weatherService.fetchData()) {
+    if (await _weatherService.fetchWeatherData()) {
       _weatherModel = _weatherService.weatherModel;
       _lastUpdated = DateTime.now();
     } else {

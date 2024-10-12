@@ -1,23 +1,20 @@
 import 'dart:async';
-import 'package:campus_mobile_experimental/app_networking.dart';
 import 'package:campus_mobile_experimental/core/models/events.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:network_helper/app_networking.dart';
 
 class EventsService {
   bool _isLoading = false;
   DateTime? _lastUpdated;
   String? _error;
   List<EventModel>? _data;
+  EventsService() { fetchEventsData(); }
 
-  final NetworkHelper _networkHelper = NetworkHelper();
-  EventsService() { fetchData(); }
-
-  Future<bool> fetchData() async {
+  Future<bool> fetchEventsData() async {
     _error = null; _isLoading = true;
     try {
       /// fetch data
-      String _response =
-          await _networkHelper.fetchData(dotenv.get('EVENTS_ENDPOINT'));
+      String _response = await fetchData(dotenv.get('EVENTS_ENDPOINT'));
 
       /// parse data
       final data = eventModelFromJson(_response);

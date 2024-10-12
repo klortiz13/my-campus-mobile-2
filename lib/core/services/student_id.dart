@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'package:campus_mobile_experimental/app_networking.dart';
 import 'package:campus_mobile_experimental/core/models/student_id_name.dart';
 import 'package:campus_mobile_experimental/core/models/student_id_photo.dart';
 import 'package:campus_mobile_experimental/core/models/student_id_profile.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:network_helper/app_networking.dart';
 
 class StudentIdService {
   final String myStudentProfileApiUrl =
@@ -17,14 +17,13 @@ class StudentIdService {
   StudentIdNameModel _studentIdNameModel = StudentIdNameModel();
   StudentIdPhotoModel _studentIdPhotoModel = StudentIdPhotoModel();
   StudentIdProfileModel _studentIdProfileModel = StudentIdProfileModel();
-  final NetworkHelper _networkHelper = NetworkHelper();
 
   //Removed term (not used)
   Future<bool> fetchStudentIdName(Map<String, String> headers) async {
     _error = null; _isLoading = true;
     try {
       /// fetch data
-      String _response = await _networkHelper.authorizedFetch(
+      String _response = await authorizedFetch(
           myStudentContactApiUrl + '/display_name', headers);
 
       /// parse data
@@ -43,7 +42,7 @@ class StudentIdService {
     _error = null; _isLoading = true;
     try {
       /// fetch data
-      String _response = await _networkHelper.authorizedFetch(
+      String _response = await authorizedFetch(
           myStudentContactApiUrl + '/photo', headers);
 
       /// parse data
@@ -62,7 +61,7 @@ class StudentIdService {
     _error = null; _isLoading = true;
     try {
       /// fetch data
-      String _response = await _networkHelper.authorizedFetch(
+      String _response = await authorizedFetch(
           myStudentProfileApiUrl + '/profile', headers);
 
       _studentIdProfileModel = studentIdProfileModelFromJson(_response);

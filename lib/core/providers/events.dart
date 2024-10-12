@@ -25,7 +25,7 @@ class EventsDataProvider extends ChangeNotifier {
   void fetchEvents() async {
     _isLoading = true; _error = null;
     notifyListeners();
-    if (await _eventsService.fetchData()) {
+    if (await _eventsService.fetchEventsData()) {
       _eventsModels = _eventsService.eventsModels;
       _lastUpdated = DateTime.now();
 

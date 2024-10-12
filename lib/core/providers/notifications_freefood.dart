@@ -6,6 +6,7 @@ import 'package:campus_mobile_experimental/core/providers/messages.dart';
 import 'package:campus_mobile_experimental/core/services/notifications_freefood.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:network_helper/app_networking.dart';
 
 class FreeFoodDataProvider extends ChangeNotifier {
   FreeFoodDataProvider() {
@@ -24,6 +25,9 @@ class FreeFoodDataProvider extends ChangeNotifier {
   late HashMap<String, int?> _messageToCount;
   late HashMap<String, int?> _messageToMaxCount;
   List<String>? _registeredEvents;
+  final Map<String, String> headers = {
+    "accept": "application/json",
+  };
 
   ///STATES
   bool? _isLoading;
@@ -94,7 +98,7 @@ class FreeFoodDataProvider extends ChangeNotifier {
       _error = _freeFoodService.error;
       if (_error != null &&
           _error!.contains(ErrorConstants.invalidBearerToken)) {
-        if (await _freeFoodService.getNewToken()) {
+        if (await getNewToken(headers)) {
           await fetchCount(id);
         }
       }
@@ -119,7 +123,7 @@ class FreeFoodDataProvider extends ChangeNotifier {
       _error = _freeFoodService.error;
       if (_error != null &&
           _error!.contains(ErrorConstants.invalidBearerToken)) {
-        if (await _freeFoodService.getNewToken()) {
+        if (await getNewToken(headers)) {
           await fetchMaxCount(id);
         }
       }
@@ -156,7 +160,7 @@ class FreeFoodDataProvider extends ChangeNotifier {
       _error = _freeFoodService.error;
       if (_error != null &&
           _error!.contains(ErrorConstants.invalidBearerToken)) {
-        if (await _freeFoodService.getNewToken()) {
+        if (await getNewToken(headers)) {
           await updateCount(id, body);
         }
       }

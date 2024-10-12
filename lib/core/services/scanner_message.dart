@@ -1,21 +1,19 @@
 import 'dart:async';
-import 'package:campus_mobile_experimental/app_networking.dart';
 import 'package:campus_mobile_experimental/core/models/scanner_message.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:network_helper/app_networking.dart';
 
 class ScannerMessageService {
   bool _isLoading = false;
   DateTime? _lastUpdated;
   String? _error;
-  final NetworkHelper _networkHelper = NetworkHelper();
   ScannerMessageModel _scannerMessageModel = ScannerMessageModel();
 
   Future<bool> fetchData(Map<String, String> headers) async {
     _error = null; _isLoading = true;
     try {
       /// fetch data
-      String _response =
-          await _networkHelper.authorizedFetch(dotenv.get('SCANNER_MESSAGE_ENDPOINT'), headers);
+      String _response = await authorizedFetch(dotenv.get('SCANNER_MESSAGE_ENDPOINT'), headers);
 
       /// parse data
       _scannerMessageModel = scannerMessageModelFromJson(_response);

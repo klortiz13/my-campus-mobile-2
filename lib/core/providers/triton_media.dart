@@ -28,7 +28,7 @@ class MediaDataProvider extends ChangeNotifier {
     _isLoading = true;
     _error = null;
     notifyListeners();
-    if (await _mediaService.fetchData()) {
+    if (await _mediaService.fetchTritonMediaData()) {
       _mediaModels = _mediaService.mediaModels;
       _lastUpdated = DateTime.now();
 

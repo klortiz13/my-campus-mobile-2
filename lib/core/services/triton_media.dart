@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:campus_mobile_experimental/app_networking.dart';
 import 'package:campus_mobile_experimental/core/models/triton_media.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:network_helper/app_networking.dart';
 
 class MediaService {
   final String endpoint = dotenv.get('TRITON_MEDIA_ENDPOINT');
@@ -9,14 +9,13 @@ class MediaService {
   DateTime? _lastUpdated;
   String? _error;
   List<MediaModel>? _data;
-  final NetworkHelper _networkHelper = NetworkHelper();
-  MediaService() { fetchData(); }
+  MediaService() { fetchTritonMediaData(); }
 
-  Future<bool> fetchData() async {
+  Future<bool> fetchTritonMediaData() async {
     _error = null; _isLoading = true;
     try {
       /// fetch data
-      String _response = await _networkHelper.fetchData(endpoint);
+      String _response = await fetchData(endpoint);
 
       /// parse data
       final data = mediaModelFromJson(_response);

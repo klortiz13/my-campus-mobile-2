@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:campus_mobile_experimental/app_constants.dart';
-import 'package:campus_mobile_experimental/app_networking.dart';
 import 'package:campus_mobile_experimental/core/models/location.dart';
 import 'package:campus_mobile_experimental/core/models/speed_test.dart';
 import 'package:campus_mobile_experimental/core/providers/user.dart';
 import 'package:campus_mobile_experimental/core/services/speed_test.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:network_helper/app_networking.dart';
 import 'package:path_provider/path_provider.dart';
 
 class SpeedTestProvider extends ChangeNotifier {
@@ -15,7 +15,6 @@ class SpeedTestProvider extends ChangeNotifier {
   bool? _isLoading;
   late Coordinates _coordinates;
   String? _error;
-  NetworkHelper _networkHelper = new NetworkHelper();
   Dio dio = new Dio();
   Stopwatch _timer = new Stopwatch();
   double? _speedDownload;
@@ -242,8 +241,7 @@ class SpeedTestProvider extends ChangeNotifier {
       }
       // Send to offload API
       try {
-        _networkHelper
-            .authorizedPost(
+            authorizedPost(
                 mobileLoggerApiWifi, offloadDataHeader, json.encode(log))
             .then((value) {
           return value;
@@ -255,20 +253,17 @@ class SpeedTestProvider extends ChangeNotifier {
             'Authorization':
                 'Bearer ${_userDataProvider.authenticationModel?.accessToken}'
           };
-          _networkHelper.authorizedPost(
-              mobileLoggerApiWifi, offloadDataHeader, json.encode(log));
+          authorizedPost(mobileLoggerApiWifi, offloadDataHeader, json.encode(log));
         }
       }
     } else {
       try {
         getNewToken().then((value) {
-          _networkHelper.authorizedPost(
-              mobileLoggerApiWifi, headers, json.encode(log));
+          authorizedPost(mobileLoggerApiWifi, headers, json.encode(log));
         });
       } catch (exception) {
         getNewToken().then((value) {
-          _networkHelper.authorizedPost(
-              mobileLoggerApiWifi, headers, json.encode(log));
+          authorizedPost(mobileLoggerApiWifi, headers, json.encode(log));
         });
       }
     }
@@ -315,8 +310,7 @@ class SpeedTestProvider extends ChangeNotifier {
       }
       // Send to offload API
       try {
-        _networkHelper.authorizedPost(
-            mobileLoggerApiWifiReport, offloadDataHeader, json.encode(wiFiLog));
+        authorizedPost(mobileLoggerApiWifiReport, offloadDataHeader, json.encode(wiFiLog));
       } catch (exception) {
         if (exception.toString().contains(ErrorConstants.invalidBearerToken)) {
           _userDataProvider.silentLogin();
@@ -324,20 +318,17 @@ class SpeedTestProvider extends ChangeNotifier {
             'Authorization':
                 'Bearer ${_userDataProvider.authenticationModel?.accessToken}'
           };
-          _networkHelper.authorizedPost(mobileLoggerApiWifiReport,
-              offloadDataHeader, json.encode(wiFiLog));
+          authorizedPost(mobileLoggerApiWifiReport, offloadDataHeader, json.encode(wiFiLog));
         }
       }
     } else {
       try {
         getNewToken().then((value) {
-          _networkHelper.authorizedPost(
-              mobileLoggerApiWifiReport, headers, json.encode(wiFiLog));
+          authorizedPost(mobileLoggerApiWifiReport, headers, json.encode(wiFiLog));
         });
       } catch (exception) {
         getNewToken().then((value) {
-          _networkHelper.authorizedPost(
-              mobileLoggerApiWifiReport, headers, json.encode(wiFiLog));
+          authorizedPost(mobileLoggerApiWifiReport, headers, json.encode(wiFiLog));
         });
       }
     }
@@ -351,8 +342,7 @@ class SpeedTestProvider extends ChangeNotifier {
           "Basic djJlNEpYa0NJUHZ5akFWT0VRXzRqZmZUdDkwYTp2emNBZGFzZWpmaWZiUDc2VUJjNDNNVDExclVh"
     };
     try {
-      return _networkHelper
-          .authorizedPost(
+      return authorizedPost(
               tokenEndpoint, tokenHeaders, "grant_type=client_credentials")
           .then((response) {
         headers["Authorization"] = "Bearer " + response["access_token"];

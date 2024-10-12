@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:campus_mobile_experimental/app_networking.dart';
 import 'package:campus_mobile_experimental/core/models/cards.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:network_helper/app_networking.dart';
 
 class CardsService {
   bool _isLoading = false;
@@ -10,7 +10,6 @@ class CardsService {
   String? _error;
 
   Map<String, CardsModel>? _cardsModel;
-  final NetworkHelper _networkHelper = NetworkHelper();
   final Map<String, String> headers = {
     "accept": "application/json",
   };
@@ -24,12 +23,12 @@ class CardsService {
     try {
       String cardListEndpoint = dotenv.get('CARD_LIST_ENDPOINT') + ucsdAffiliation;
       String _response =
-          await _networkHelper.authorizedFetch(cardListEndpoint, headers);
+          await authorizedFetch(cardListEndpoint, headers);
       _cardsModel = cardsModelFromJson(_response);
       return true;
     } catch (e) {
       if (e.toString().contains("401")) {
-        if (await _networkHelper.getNewToken(headers)) {
+        if (await getNewToken(headers)) {
           return await fetchCards(ucsdAffiliation);
         }
       }

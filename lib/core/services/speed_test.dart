@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:campus_mobile_experimental/app_networking.dart';
 import 'package:campus_mobile_experimental/core/models/speed_test.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:network_helper/app_networking.dart';
 import 'package:wifi_connection/WifiConnection.dart';
 import 'package:wifi_connection/WifiInfo.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -32,7 +32,6 @@ class SpeedTestService {
   }
 
   Connectivity _connectivity = Connectivity();
-  final NetworkHelper _networkHelper = NetworkHelper();
   SpeedTestModel? _speedTestModel;
   bool _isLoading = false;
   String? _error;
@@ -43,14 +42,12 @@ class SpeedTestService {
   Future<bool> fetchSignedUrls() async {
     _error = null; _isLoading = true;
     try {
-      await _networkHelper.getNewToken(headers);
+      await getNewToken(headers);
       // Get download & upload urls
-      String? _downloadResponse = await _networkHelper.authorizedFetch(
-          dotenv.get('SPEED_TEST_DOWNLOAD_ENDPOINT'),
-          headers);
-      String? _uploadResponse = await _networkHelper.authorizedFetch(
-          dotenv.get('SPEED_TEST_UPLOAD_ENDPOINT'),
-          headers);
+      String? _downloadResponse = await authorizedFetch(
+          dotenv.get('SPEED_TEST_DOWNLOAD_ENDPOINT'), headers);
+      String? _uploadResponse = await authorizedFetch(
+          dotenv.get('SPEED_TEST_UPLOAD_ENDPOINT'), headers);
 
       /// parse data
       await fetchNetworkDiagnostics().then((WifiInfo? data) {

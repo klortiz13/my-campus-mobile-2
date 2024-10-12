@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:campus_mobile_experimental/app_networking.dart';
 import 'package:campus_mobile_experimental/core/models/dining.dart';
 import 'package:campus_mobile_experimental/core/models/dining_menu.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:network_helper/app_networking.dart';
 
 class DiningService {
   DiningService() {
@@ -14,7 +14,6 @@ class DiningService {
   String? _error;
   List<DiningModel>? _data;
   DiningMenuItemsModel? _menuData;
-  final NetworkHelper _networkHelper = NetworkHelper();
   final Map<String, String> headers = {
     "accept": "application/json",
   };
@@ -23,7 +22,7 @@ class DiningService {
     _error = null; _isLoading = true;
     try {
       /// fetch data
-      String _response = await _networkHelper.authorizedFetch(
+      String _response = await authorizedFetch(
           dotenv.get('DINING_BASE_ENDPOINT') + '/locations', headers);
 
       /// parse data
@@ -34,7 +33,7 @@ class DiningService {
       /// if the authorized fetch failed we know we have to refresh the
       /// token for this service
       if (e.toString().contains("401")) {
-        if (await _networkHelper.getNewToken(headers)) {
+        if (await getNewToken(headers)) {
           return await fetchData();
         }
       }
@@ -49,7 +48,7 @@ class DiningService {
     _error = null; _isLoading = true;
     try {
       /// fetch data
-      String _response = await _networkHelper.authorizedFetch(
+      String _response = await authorizedFetch(
           dotenv.get('DINING_BASE_ENDPOINT') + '/menu/' + id, headers);
 
       /// parse data
@@ -60,7 +59,7 @@ class DiningService {
       /// if the authorized fetch failed we know we have to refresh the
       /// token for this service
       if (e.toString().contains("401")) {
-        if (await _networkHelper.getNewToken(headers)) {
+        if (await getNewToken(headers)) {
           return await fetchMenu(id);
         }
       }

@@ -26,7 +26,7 @@ class NoticesDataProvider extends ChangeNotifier {
     _isLoading = true;
     _error = null;
     notifyListeners();
-    if (await _noticesService.fetchData()) {
+    if (await _noticesService.fetchNoticesData()) {
       _noticesModel = _noticesService.noticesModel;
       _lastUpdated = DateTime.now();
     } else {

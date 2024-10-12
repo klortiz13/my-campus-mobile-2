@@ -1,20 +1,19 @@
 import 'dart:async';
-import 'package:campus_mobile_experimental/app_networking.dart';
 import 'package:campus_mobile_experimental/core/models/notifications.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:network_helper/app_networking.dart';
 
 class MessageService {
   bool _isLoading = false;
   DateTime? _lastUpdated;
   String? _error;
   Messages? _data;
-  final NetworkHelper _networkHelper = NetworkHelper();
 
   Future<bool> fetchMyMessagesData(int? timestamp, Map<String, String> authHeaders) async {
     _error = null; _isLoading = true;
     try {
       /// fetch data
-      String _response = await _networkHelper.authorizedFetch(
+      String _response = await authorizedFetch(
           dotenv.get('MY_MESSAGES_API_ENDPOINT') + timestamp.toString(), authHeaders);
 
       /// parse data
@@ -35,8 +34,8 @@ class MessageService {
     String timestampEndpoint = '&start=' + timestamp.toString();
     try {
       /// fetch data
-      String _response = await _networkHelper
-          .fetchData(dotenv.get('TOPICS_API_ENDPOINT') + topicsEndpoint + timestampEndpoint);
+      String _response = await fetchData(
+          dotenv.get('TOPICS_API_ENDPOINT') + topicsEndpoint + timestampEndpoint);
 
       /// parse data
       final data = messagesFromJson(_response);

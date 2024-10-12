@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:campus_mobile_experimental/app_networking.dart';
 import 'package:campus_mobile_experimental/core/models/availability.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:network_helper/app_networking.dart';
 
 class AvailabilityService {
   AvailabilityService();
@@ -9,20 +9,18 @@ class AvailabilityService {
   DateTime? _lastUpdated;
   String? _error;
   List<AvailabilityModel>? _data;
+  List<AvailabilityModel>? get data => _data;
 
   /// add state related things for view model here
   /// add any type of data manipulation here so it can be accessed via provider
-  List<AvailabilityModel>? get data => _data;
-  final NetworkHelper _networkHelper = NetworkHelper();
-
   Future<bool> fetchData() async {
     _error = null; _isLoading = true;
     try {
       /// fetch data
-      String _response = await (_networkHelper.authorizedFetch(
+      String _response = await authorizedFetch(
           dotenv.get('AVAILABILITY_API_ENDPOINT'), {
         "Authorization": dotenv.get('MOBILE_APP_PUBLIC_DATA_KEY')
-      }));
+      });
 
       /// parse data
       final data = availabilityStatusFromJson(_response);

@@ -878,8 +878,8 @@ packages:
   network_helper:
     dependency: "direct main"
     description:
-      path: "C:\\Users\\kortizalvarado\\Downloads\\ITS\\networkHelperLibrary\\networkHelperLibraryWork\\network_helper"
-      relative: false
+      path: network_helper
+      relative: true
     source: path
     version: "0.0.1"
   package_config:

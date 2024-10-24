@@ -878,9 +878,11 @@ packages:
   network_helper:
     dependency: "direct main"
     description:
-      path: network_helper
-      relative: true
-    source: path
+      path: "."
+      ref: master
+      resolved-ref: b3978a1051edb49ea8ee5abcc7c075820bbe9a4b
+      url: "https://github.com/UCSD/NetworkHelper.git"
+    source: git
     version: "0.0.1"
   package_config:
     dependency: transitive

@@ -40,7 +40,9 @@ dependencies:
   measured_size: ^1.0.0
   geolocator: ^9.0.2
   network_helper:
-    path: network_helper
+    git:
+      url: https://github.com/UCSD/NetworkHelper.git
+      ref: master
   package_info: 2.0.2
   percent_indicator: 4.2.2
   permission_handler: ^10.2.0

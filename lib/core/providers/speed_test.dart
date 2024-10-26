@@ -8,6 +8,7 @@ import 'package:campus_mobile_experimental/core/services/speed_test.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:network_helper/app_networking.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:path_provider/path_provider.dart';
 
 class SpeedTestProvider extends ChangeNotifier {
@@ -35,8 +36,7 @@ class SpeedTestProvider extends ChangeNotifier {
     "accept": "application/json",
   };
   Map<String, String>? offloadDataHeader;
-  final String mobileLoggerApi =
-      'https://api-qa.ucsd.edu:8243/mobileapplogger/v1.1.0/log';
+  final mobileLoggerApi = dotenv.get('MOBILE_APP_LOGGER');
 
   SpeedTestProvider() {
     _isLoading = false;
@@ -273,8 +273,7 @@ class SpeedTestProvider extends ChangeNotifier {
     final mobileLoggerApiWifiReport = mobileLoggerApi + "?type=WIFIREPORT";
 
     offloadDataHeader = {
-      'Authorization':
-          'Bearer ${_userDataProvider.authenticationModel?.accessToken}'
+      'Authorization': 'Bearer ${_userDataProvider.authenticationModel?.accessToken}'
     };
     wiFiLog = {
       "userId": (_userDataProvider.userProfileModel!.pid) == null
@@ -315,8 +314,7 @@ class SpeedTestProvider extends ChangeNotifier {
         if (exception.toString().contains(ErrorConstants.invalidBearerToken)) {
           _userDataProvider.silentLogin();
           offloadDataHeader = {
-            'Authorization':
-                'Bearer ${_userDataProvider.authenticationModel?.accessToken}'
+            'Authorization': 'Bearer ${_userDataProvider.authenticationModel?.accessToken}'
           };
           authorizedPost(mobileLoggerApiWifiReport, offloadDataHeader, json.encode(wiFiLog));
         }
